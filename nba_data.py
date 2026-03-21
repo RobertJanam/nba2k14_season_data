@@ -1320,18 +1320,17 @@ def other_quarter_analytics():
         return_back()
 
     print("\nQ: Quarter")
-    print("\nH: Highest")
-    print("\nL: Lowest")
+    print("H: Highest")
+    print("L: Lowest")
+    print("O: Overall")
+    print("'Q H Score O' means the quarter in which you scored the highest overall in numerical value.\n")
 
     print(f"Team: {official_team_name}")
-    print("="*100)
-    print("OTHER QUARTER ANALYTICS".center(100))
-    print("="*100)
-    print(f"| {'H Q Score':<8} | {'Q H Score':<8} | {'H Q Score':<8} | {'L Q Score':<8} | {'L Q Score':<8} |")
-    print("-"*100)
-
-    highest_quarter_score = []
-    lowest_quarter_score = []
+    print("="*81)
+    print("OTHER QUARTER ANALYTICS".center(81))
+    print("="*81)
+    print(f"| {'H Q Score':<10}  | {'Q H Score O':<8} | {'Q H Score':<8} | {'L Q Score':<8}   | {'Q L Score O':<8} | {'Q L Score':<8} |")
+    print("-"*81)
 
     q1_list = []
     q2_list = []
@@ -1342,6 +1341,32 @@ def other_quarter_analytics():
     q2_list = [int(game[1]) for game in quarter_list]
     q3_list = [int(game[2]) for game in quarter_list]
     q4_list = [int(game[3]) for game in quarter_list]
+
+    max_q1 = max(q1_list)
+    max_q2 = max(q2_list)
+    max_q3 = max(q3_list)
+    max_q4 = max(q4_list)
+
+    min_q1 = min(q1_list)
+    min_q2 = min(q2_list)
+    min_q3 = min(q3_list)
+    min_q4 = min(q4_list)
+
+    max_q_list = []
+    min_q_list = []
+
+    max_q_list.append(max_q1)
+    max_q_list.append(max_q2)
+    max_q_list.append(max_q3)
+    max_q_list.append(max_q4)
+
+    min_q_list.append(min_q1)
+    min_q_list.append(min_q2)
+    min_q_list.append(min_q3)
+    min_q_list.append(min_q4)
+
+    max_qo = max(max_q_list)
+    min_qo = min(min_q_list)
 
     q1_sum = sum(q1_list)
     q2_sum = sum(q2_list)
@@ -1355,24 +1380,54 @@ def other_quarter_analytics():
     quarter_sum_list.append(q3_sum)
     quarter_sum_list.append(q4_sum)
 
-    max_sum = quarter_sum_list[0]
-    min_sum = quarter_sum_list[0]
+    max_sum = max(quarter_sum_list)
+    min_sum = min(quarter_sum_list)
 
-    for i in quarter_sum_list:
-        if i > max_sum:
-            max_sum = i
-        if i < min_sum:
-            min_sum = i
-
-    for i in quarter_sum_list:
+    for idx, i in enumerate(quarter_sum_list):
         if max_sum == i:
-            if quarter_sum_list[max_sum] == 0:
+            if idx == 0:
                 hq_score = "1st Quarter"
-            elif quarter_sum_list[max_sum] == 0:
+                max_q = max(q1_list)
+            elif idx == 1:
                 hq_score = "2nd Quarter"
+                max_q = max(q2_list)
+            elif idx == 2:
+                hq_score = "3rd Quarter"
+                max_q = max(q3_list)
             else:
-                break
+                hq_score = "4th Quarter"
+                max_q = max(q4_list)
 
+        if min_sum == i:
+            if idx == 0:
+                lq_score = "1st Quarter"
+                min_q = min(q1_list)
+            elif idx == 1:
+                lq_score = "2nd Quarter"
+                min_q = min(q2_list)
+            elif idx == 2:
+                lq_score = "3rd Quarter"
+                min_q = min(q3_list)
+            else:
+                lq_score = "4th Quarter"
+                max_q = min(q4_list)
+
+    print(f"| {hq_score:<9} |     {max_qo:<8}|    {max_q:<7}| {lq_score:<12}|     {min_qo:<8}|    {min_q:<7}|")
+
+    print("-"*81)
+    print("="*81 + "\n")
+
+    q1_list.clear()
+    q2_list.clear()
+    q3_list.clear()
+    q4_list.clear()
+
+    max_q_list.clear()
+    min_q_list.clear()
+
+    quarter_sum_list.clear()
+
+    return_back_quarter()
 
 # =================
 # ppg score option
