@@ -28,6 +28,11 @@
     #     --quarter with the highest scores (displays total as well)
     #     --quarters above 30
 
+# 4. User clicks point scores
+    # 1. Check Player Points
+    #      -- Sort in ascending order
+    #      -- Sort in descending order
+    # 2. Check Ranking --> talk about ppg ranked from highest to lowest
 
 import csv
 import os
@@ -1212,7 +1217,7 @@ def quarter_score():
 
     while True:
         print("\n"+ "NBA 2K14 🏀".center(50))
-        print("Game Score".center(50))
+        print("Quarter Score".center(50))
         print(f"Team: {official_team_name}")
         print("====================================================")
         print("|"+ "Choose your option".center(50)+"|")
@@ -1241,7 +1246,7 @@ def quarter_score():
         except ValueError:
             print("Please enter a valid number")
 
-# Every option under game score
+# Every option under quarter score
 # =============================
 
 # check quarter score for every game
@@ -1433,6 +1438,140 @@ def other_quarter_analytics():
 # ppg score option
 # =================
 def ppg_score():
+    # 4. User clicks point scores
+    #   1. Check Player Points
+    #      -- Sort in ascending order
+    #      -- Sort in descending order
+    #   2. Check Ranking --> talk about ppg ranked from highest to lowest
+
+    while True:
+        print("\n"+ "NBA 2K14 🏀".center(50))
+        print("Player Point Score".center(50))
+        print(f"Team: {official_team_name}")
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. Check Player points".center(50)+"|")
+        print("|"+ "2. Check Ranking".center(50)+"|")
+        print("|"+ "3. Main menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                player_points()
+            elif option_prompt == 2:
+                points_ranking()
+            elif option_prompt == 3:
+                automate_load_csv()
+                save_to_csv()
+                main()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
+
+# Every option under quarter score
+# =============================
+
+# provides details for the highest player points in each game.
+def player_points():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print("\nW: Won")
+    print("L: Lost\n")
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER POINTS".center(50))
+    print("="*50)
+    print(f"| {'PLAYER NAME':<13} | {'POINTS':<8} | {'OPPONENT':<12} | {'W/L':<4} |")
+    print("-"*50)
+
+    def result(game):
+        if official_team_name.split()[-1] in game[3]:
+            result = "W"
+        else:
+            result = "L"
+        return result
+
+    for points, game in zip(ppg_list, game_list):
+        print(f"| {points[0]:<14}| {points[1]:<9}| {points[2]:<13}| {result(game):<5}|")
+
+    print("-"*50)
+    print("="*50 + "\n")
+
+    sort = input("\nPress any key to return to menu or (s) to sort: ").lower()
+    if sort == "s":
+        print("y")
+        sort_by_points()
+    else:
+        print("z")
+        ppg_score()
+
+# sort in ascending or descending order
+def sort_by_points():
+    while True:
+        print("Sort".center(50))
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. Ascending Order".center(50)+"|")
+        print("|"+ "2. Descending Order".center(50)+"|")
+        print("|"+ "3. Menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                sort_ascending()
+            elif option_prompt == 2:
+                sort_descending()
+            elif option_prompt == 3:
+                ppg_score()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
+
+def sort_ascending():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER POINTS (A)".center(50))
+    print("="*50)
+    print(f"| {'NO.'}{'PLAYER NAME':<13} | {'POINTS':<8} | {'OPPONENT':<12} | {'W/L':<4} |")
+    print("-"*50)
+
+    points_list = []
+    ascending_ppg_list = []
+
+    for points in ppg_list:
+        #list(map(int, points[1]))
+        points_list.append(int(points[1]))
+        ascending_points = sorted(points_list, reverse=True)
+        #print(ascending_points)
+
+    for i, points in zip(ascending_points, ppg_list):
+        if str(i) in points[1]:
+            print(i)
+            ascending_ppg_list.append(points)
+
+    #print(ascending_ppg_list)
+
+def sort_descending():
+    pass
+
+def points_ranking():
     pass
 
 def assist_score():
@@ -1518,6 +1657,10 @@ def return_back_game():
 def return_back_quarter():
     input("\nPress enter to return to menu... ")
     quarter_score()
+
+def return_back_ppg():
+    input("\nPress enter to return to menu... ")
+    ppg_score()
 
 if __name__ == "__main__":
     load_csv()
