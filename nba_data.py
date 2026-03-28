@@ -1472,7 +1472,7 @@ def ppg_score():
         except ValueError:
             print("Please enter a valid number")
 
-# Every option under quarter score
+# Every option under point score
 # =============================
 
 # provides details for the highest player points in each game.
@@ -1507,10 +1507,8 @@ def player_points():
 
     sort = input("\nPress any key to return to menu or (s) to sort: ").lower()
     if sort == "s":
-        print("y")
         sort_by_points()
     else:
-        print("z")
         ppg_score()
 
 # sort in ascending or descending order
@@ -1521,8 +1519,8 @@ def sort_by_points():
         print("|"+ "Choose your option".center(50)+"|")
         print("----------------------------------------------------")
         print("|"+ "".center(50)+ "|")
-        print("|"+ "1. Ascending Order".center(50)+"|")
-        print("|"+ "2. Descending Order".center(50)+"|")
+        print("|"+ "1. From highest points".center(50)+"|")
+        print("|"+ "2. From lowest points".center(50)+"|")
         print("|"+ "3. Menu".center(50)+"|")
         print("====================================================")
 
@@ -1549,27 +1547,45 @@ def sort_ascending():
     print("="*50)
     print("PLAYER POINTS (A)".center(50))
     print("="*50)
-    print(f"| {'NO.'}{'PLAYER NAME':<13} | {'POINTS':<8} | {'OPPONENT':<12} | {'W/L':<4} |")
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'POINTS':<8} | {'OPPONENT':<12} |")
     print("-"*50)
 
-    points_list = []
-    ascending_ppg_list = []
+    ppg_list.sort(key=lambda points: int(points[1]), reverse=True)
 
-    for points in ppg_list:
-        #list(map(int, points[1]))
-        points_list.append(int(points[1]))
-        ascending_points = sorted(points_list, reverse=True)
-        #print(ascending_points)
+    #print(ppg_list)
 
-    for i, points in zip(ascending_points, ppg_list):
-        if str(i) in points[1]:
-            print(i)
-            ascending_ppg_list.append(points)
+    for idx, points in enumerate(ppg_list, start=1):
+        print(f"| {idx:<4}| {points[0]:<14}| {points[1]:<9}| {points[2]:<13}|")
 
-    #print(ascending_ppg_list)
+    print("-"*50)
+    print("="*50 + "\n")
+
+    ppg_list.clear()
+    return_back_ppg()
 
 def sort_descending():
-    pass
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER POINTS (A)".center(50))
+    print("="*50)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'POINTS':<8} | {'OPPONENT':<12} |")
+    print("-"*50)
+
+    ppg_list.sort(key=lambda points: int(points[1]))
+
+    for idx, points in enumerate(ppg_list, start=1):
+        print(f"| {idx:<4}| {points[0]:<14}| {points[1]:<9}| {points[2]:<13}|")
+
+    print("-"*50)
+    print("="*50 + "\n")
+
+    ppg_list.clear()
+    return_back_ppg()
 
 def points_ranking():
     pass
