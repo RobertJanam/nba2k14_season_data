@@ -1588,7 +1588,185 @@ def sort_descending():
     return_back_ppg()
 
 def points_ranking():
-    pass
+    #   2. Check Ranking --> talk about ppg ranked from highest to lowest
+    #   -- 1. Check Highest Player Ranking
+    #   -- 2: Check Avg Leaderboard
+    while True:
+        print("Player Ranking".center(50))
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. Check Highest Player Ranking".center(50)+"|")
+        print("|"+ "2. Check Avg Leaderboard".center(50)+"|")
+        print("|"+ "3. Menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                points_overallHighest()
+            elif option_prompt == 2:
+                points_avgLeaderboard()
+            elif option_prompt == 3:
+                ppg_score()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
+
+def points_overallHighest():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print("\nW: Won")
+    print("L: Lost\n")
+
+    print(f"Team: {official_team_name}")
+    print("="*56)
+    print("PLAYER HIGHEST POINTS (RANKED)".center(50))
+    print("="*56)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'POINTS':<8} | {'OPPONENT':<12} | {'W/L':<4} |")
+    print("-"*56)
+
+    def result(game):
+        if official_team_name.split()[-1] in game[3]:
+            result = "W"
+        else:
+            result = "L"
+        return result
+
+    ppg_list.sort(key=lambda points: int(points[1]), reverse=True)
+
+    rank_ppg_list = []
+
+    for p in ppg_list:
+        if not any(p[0] == existing[0] for existing in rank_ppg_list):
+            rank_ppg_list.append(p)
+
+    #print(rank_ppg_list)
+
+    for idx, (points, game) in enumerate(zip(rank_ppg_list, game_list), start=1):
+        print(f"| {idx:<4}| {points[0]:<14}| {points[1]:<9}| {points[2]:<13}| {result(game):<5}|")
+
+    print("-"*56)
+    print("="*56 + "\n")
+
+    ppg_list.clear()
+    rank_ppg_list.clear()
+
+    input("\nPress enter to return to menu... ")
+    points_ranking()
+
+def points_avgLeaderboard():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print(f"Team: {official_team_name}")
+    print("="*39)
+    print("PLAYER POINTS LEADERBOARD".center(39))
+    print("="*39)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<16} | {'AVG POINTS':<9} |")
+    print("-"*39)
+
+    player_unique = []
+    # take unique names
+    for p in ppg_list:
+        if not any(p[0] == existing for existing in player_unique):
+            player_unique.append(p[0])
+
+    #print(player_unique)
+
+    sort_ppg_list = []
+    # sort ppg list
+    for i in player_unique:
+        for players in ppg_list:
+            if i == players[0]:
+                sort_ppg_list.append(players)
+
+    #print(sort_ppg_list)
+
+    sum_counter = 0
+    player_tracker = "default"
+    player_counter = 0
+
+    player_avg_dict = {}
+
+    for idx, points in enumerate(sort_ppg_list, start=1):
+        if idx == 1:
+            player_tracker = points[0]
+            sum_counter += int(points[1])
+            player_counter += 1
+
+        else:
+            if player_tracker == points[0]:
+                if idx == len(sort_ppg_list):
+                    sum_counter += int(points[1])
+                    player_counter += 1
+                    get_avg = sum_counter / player_counter
+                    polish_get_avg = float(round(get_avg, 2))
+                    player_avg_dict[player_tracker] = polish_get_avg
+                    player_counter = 0
+                    sum_counter = 0
+                    player_tracker = "default"
+                    break
+
+                sum_counter += int(points[1])
+                player_counter += 1
+                #print(player_counter)
+                #print("Sum: ", sum_counter)
+
+            else:
+                if idx == len(sort_ppg_list):
+                    get_avg = sum_counter / player_counter
+                    polish_get_avg = float(round(get_avg, 2))
+                    player_avg_dict[player_tracker] = polish_get_avg
+                    player_tracker = points[0]
+                    player_counter = 0
+                    sum_counter = 0
+
+                    sum_counter += int(points[1])
+                    player_counter += 1
+                    get_avg = sum_counter / player_counter
+                    polish_get_avg = float(round(get_avg, 2))
+                    player_avg_dict[player_tracker] = polish_get_avg
+                    player_counter = 0
+                    sum_counter = 0
+                    player_tracker = "default"
+                    break
+
+                get_avg = sum_counter / player_counter
+                polish_get_avg = float(round(get_avg, 2))
+                player_avg_dict[player_tracker] = polish_get_avg
+                player_tracker = points[0]
+                player_counter = 0
+                sum_counter = 0
+                sum_counter += int(points[1])
+                player_counter += 1
+
+    #print(player_avg_dict)
+
+    from collections import OrderedDict
+
+    player_avg_dict_sorted = OrderedDict(sorted(player_avg_dict.items(), key=lambda x: x[1], reverse=True))
+
+    for idx, (player, points) in enumerate(player_avg_dict_sorted.items(), start=1):
+        print(f"| {idx:<4}| {player:<17}| {points:<11}|")
+
+    print("-"*39)
+    print("="*39 + "\n")
+
+    player_unique.clear()
+    sort_ppg_list.clear()
+    player_avg_dict.clear()
+    player_avg_dict_sorted.clear()
+
+    input("\nPress enter to return to menu... ")
+    points_ranking()
 
 def assist_score():
     pass
