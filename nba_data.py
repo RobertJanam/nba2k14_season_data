@@ -34,6 +34,12 @@
     #      -- Sort in descending order
     # 2. Check Ranking --> talk about ppg ranked from highest to lowest
 
+# 5. User clicks point scores
+    # 1. Check Player Assists
+    #      -- Sort in ascending order
+    #      -- Sort in descending order
+    # 2. Check Ranking --> assist ranked from highest to lowest
+
 import csv
 import os
 import time
@@ -1434,6 +1440,7 @@ def other_quarter_analytics():
 
     return_back_quarter()
 
+
 # =================
 # ppg score option
 # =================
@@ -1527,9 +1534,9 @@ def sort_by_points():
         try:
             option_prompt = int(input("Enter your choice here --> "))
             if option_prompt == 1:
-                sort_ascending()
+                sort_ascending_points()
             elif option_prompt == 2:
-                sort_descending()
+                sort_descending_points()
             elif option_prompt == 3:
                 ppg_score()
             else:
@@ -1537,7 +1544,7 @@ def sort_by_points():
         except ValueError:
             print("Please enter a valid number")
 
-def sort_ascending():
+def sort_ascending_points():
     automate_load_csv()
     if not game_list:
         print("No games entered yet.\nEnter and save your data first to view them.")
@@ -1563,7 +1570,7 @@ def sort_ascending():
     ppg_list.clear()
     return_back_ppg()
 
-def sort_descending():
+def sort_descending_points():
     automate_load_csv()
     if not game_list:
         print("No games entered yet.\nEnter and save your data first to view them.")
@@ -1768,9 +1775,338 @@ def points_avgLeaderboard():
     input("\nPress enter to return to menu... ")
     points_ranking()
 
+# =================
+# assist score option
+# =================
 def assist_score():
-    pass
+    # 5. User clicks point scores
+    # 1. Check Player Assists
+    #      -- Sort in ascending order
+    #      -- Sort in descending order
+    # 2. Check Ranking --> assist ranked from highest to lowest
 
+    while True:
+        print("\n"+ "NBA 2K14 🏀".center(50))
+        print("Player Assist Score".center(50))
+        print(f"Team: {official_team_name}")
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. Check Player Assists".center(50)+"|")
+        print("|"+ "2. Check Ranking".center(50)+"|")
+        print("|"+ "3. Main menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                player_assists()
+            elif option_prompt == 2:
+                assist_ranking()
+            elif option_prompt == 3:
+                automate_load_csv()
+                save_to_csv()
+                main()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
+
+# Every option under point score
+# =============================
+
+# provides details for the highest player points in each game.
+def player_assists():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print("\nW: Won")
+    print("L: Lost\n")
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER ASSISTS".center(50))
+    print("="*50)
+    print(f"| {'PLAYER NAME':<13} | {'ASSISTS':<8} | {'OPPONENT':<12} | {'W/L':<4} |")
+    print("-"*50)
+
+    def result(game):
+        if official_team_name.split()[-1] in game[3]:
+            result = "W"
+        else:
+            result = "L"
+        return result
+
+    for assists, game in zip(assist_list, game_list):
+        print(f"| {assists[0]:<14}| {assists[1]:<9}| {assists[2]:<13}| {result(game):<5}|")
+
+    print("-"*50)
+    print("="*50 + "\n")
+
+    sort = input("\nPress any key to return to menu or (s) to sort: ").lower()
+    if sort == "s":
+        sort_by_assists()
+    else:
+        assist_score()
+
+def sort_by_assists():
+    while True:
+        print("Sort".center(50))
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. From highest assists".center(50)+"|")
+        print("|"+ "2. From lowest assists".center(50)+"|")
+        print("|"+ "3. Menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                sort_ascending_assists()
+            elif option_prompt == 2:
+                sort_descending_assists()
+            elif option_prompt == 3:
+                assist_score()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
+
+def sort_ascending_assists():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER ASSISTS (A)".center(50))
+    print("="*50)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'ASSISTS':<8} | {'OPPONENT':<12} |")
+    print("-"*50)
+
+    assist_list.sort(key=lambda assists: int(assists[1]), reverse=True)
+
+    for idx, assists in enumerate(assist_list, start=1):
+        print(f"| {idx:<4}| {assists[0]:<14}| {assists[1]:<9}| {assists[2]:<13}|")
+
+    print("-"*50)
+    print("="*50 + "\n")
+
+    assist_list.clear()
+    return_back_assists()
+
+def sort_descending_assists():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER ASSISTS (A)".center(50))
+    print("="*50)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'ASSISTS':<8} | {'OPPONENT':<12} |")
+    print("-"*50)
+
+    assist_list.sort(key=lambda assists: int(assists[1]))
+
+    for idx, assists in enumerate(assist_list, start=1):
+        print(f"| {idx:<4}| {assists[0]:<14}| {assists[1]:<9}| {assists[2]:<13}|")
+
+    print("-"*50)
+    print("="*50 + "\n")
+
+    assist_list.clear()
+    return_back_assists()
+
+def assist_ranking():
+    #   2. Check Ranking --> assists ranked from highest to lowest
+    #   -- 1. Check Highest Player Assist Ranking
+    #   -- 2: Check Avg Assist Leaderboard
+    while True:
+        print("Player Ranking".center(50))
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. Check Highest Player Assist Ranking".center(50)+"|")
+        print("|"+ "2. Check Avg Assist Leaderboard".center(50)+"|")
+        print("|"+ "3. Menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                assist_overallHighest()
+            elif option_prompt == 2:
+                assist_avgLeaderboard()
+            elif option_prompt == 3:
+                assist_score()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
+
+def assist_overallHighest():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print("\nW: Won")
+    print("L: Lost\n")
+
+    print(f"Team: {official_team_name}")
+    print("="*56)
+    print("PLAYER HIGHEST ASSISTS (RANKED)".center(50))
+    print("="*56)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'ASSISTS':<8} | {'OPPONENT':<12} | {'W/L':<4} |")
+    print("-"*56)
+
+    def result(game):
+        if official_team_name.split()[-1] in game[3]:
+            result = "W"
+        else:
+            result = "L"
+        return result
+
+    assist_list.sort(key=lambda assists: int(assists[1]), reverse=True)
+
+    rank_assists_list = []
+
+    for a in assist_list:
+        if not any(a[0] == existing[0] for existing in rank_assists_list):
+            rank_assists_list.append(a)
+
+    for idx, (assists, game) in enumerate(zip(rank_assists_list, game_list), start=1):
+        print(f"| {idx:<4}| {assists[0]:<14}| {assists[1]:<9}| {assists[2]:<13}| {result(game):<5}|")
+
+    print("-"*56)
+    print("="*56 + "\n")
+
+    assist_list.clear()
+    rank_assists_list.clear()
+
+    input("\nPress enter to return to menu... ")
+    assist_ranking()
+
+def assist_avgLeaderboard():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print(f"Team: {official_team_name}")
+    print("="*39)
+    print("PLAYER ASSISTS LEADERBOARD".center(39))
+    print("="*39)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<16} | {'AVG ASSISTS':<9} |")
+    print("-"*39)
+
+    player_unique = []
+    # take unique names
+    for a in assist_list:
+        if not any(a[0] == existing for existing in player_unique):
+            player_unique.append(a[0])
+
+    #print(player_unique)
+
+    sort_assists_list = []
+    # sort ppg list
+    for i in player_unique:
+        for players in assist_list:
+            if i == players[0]:
+                sort_assists_list.append(players)
+
+    #print(sort_ppg_list)
+
+    sum_counter = 0
+    player_tracker = "default"
+    player_counter = 0
+
+    player_avg_dict = {}
+
+    for idx, points in enumerate(sort_assists_list, start=1):
+        if idx == 1:
+            player_tracker = points[0]
+            sum_counter += int(points[1])
+            player_counter += 1
+
+        else:
+            if player_tracker == points[0]:
+                if idx == len(sort_assists_list):
+                    sum_counter += int(points[1])
+                    player_counter += 1
+                    get_avg = sum_counter / player_counter
+                    polish_get_avg = float(round(get_avg, 2))
+                    player_avg_dict[player_tracker] = polish_get_avg
+                    player_counter = 0
+                    sum_counter = 0
+                    player_tracker = "default"
+                    break
+
+                sum_counter += int(points[1])
+                player_counter += 1
+                #print(player_counter)
+                #print("Sum: ", sum_counter)
+
+            else:
+                if idx == len(sort_assists_list):
+                    get_avg = sum_counter / player_counter
+                    polish_get_avg = float(round(get_avg, 2))
+                    player_avg_dict[player_tracker] = polish_get_avg
+                    player_tracker = points[0]
+                    player_counter = 0
+                    sum_counter = 0
+
+                    sum_counter += int(points[1])
+                    player_counter += 1
+                    get_avg = sum_counter / player_counter
+                    polish_get_avg = float(round(get_avg, 2))
+                    player_avg_dict[player_tracker] = polish_get_avg
+                    player_counter = 0
+                    sum_counter = 0
+                    player_tracker = "default"
+                    break
+
+                get_avg = sum_counter / player_counter
+                polish_get_avg = float(round(get_avg, 2))
+                player_avg_dict[player_tracker] = polish_get_avg
+
+                player_tracker = points[0]
+                player_counter = 0
+                sum_counter = 0
+                sum_counter += int(points[1])
+                player_counter += 1
+
+    from collections import OrderedDict
+
+    player_avg_dict_sorted = OrderedDict(sorted(player_avg_dict.items(), key=lambda x: x[1], reverse=True))
+
+    for idx, (player, points) in enumerate(player_avg_dict_sorted.items(), start=1):
+        print(f"| {idx:<4}| {player:<17}| {points:<11}|")
+
+    print("-"*39)
+    print("="*39 + "\n")
+
+    player_unique.clear()
+    sort_assists_list.clear()
+    player_avg_dict.clear()
+    player_avg_dict_sorted.clear()
+
+    input("\nPress enter to return to menu... ")
+    assist_ranking()
+
+
+# =================
+# rebound score option
+# =================
 def rebound_score():
     pass
 
@@ -1855,6 +2191,10 @@ def return_back_quarter():
 def return_back_ppg():
     input("\nPress enter to return to menu... ")
     ppg_score()
+
+def return_back_assists():
+    input("\nPress enter to return to menu... ")
+    assist_score()
 
 if __name__ == "__main__":
     load_csv()
