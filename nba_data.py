@@ -34,11 +34,17 @@
     #      -- Sort in descending order
     # 2. Check Ranking --> talk about ppg ranked from highest to lowest
 
-# 5. User clicks point scores
+# 5. User clicks assist scores
     # 1. Check Player Assists
     #      -- Sort in ascending order
     #      -- Sort in descending order
     # 2. Check Ranking --> assist ranked from highest to lowest
+
+# 6. User clicks point scores
+    # 1. Check Player Rebounds
+    #      -- Sort in ascending order
+    #      -- Sort in descending order
+    # 2. Check Ranking --> rebound ranked from highest to lowest
 
 import csv
 import os
@@ -1779,7 +1785,7 @@ def points_avgLeaderboard():
 # assist score option
 # =================
 def assist_score():
-    # 5. User clicks point scores
+    # 5. User clicks assist scores
     # 1. Check Player Assists
     #      -- Sort in ascending order
     #      -- Sort in descending order
@@ -1813,10 +1819,10 @@ def assist_score():
         except ValueError:
             print("Please enter a valid number")
 
-# Every option under point score
+# Every option under assist score
 # =============================
 
-# provides details for the highest player points in each game.
+# provides details for the highest player assists in each game.
 def player_assists():
     automate_load_csv()
     if not game_list:
@@ -2006,7 +2012,7 @@ def assist_avgLeaderboard():
     print("="*39)
     print("PLAYER ASSISTS LEADERBOARD".center(39))
     print("="*39)
-    print(f"| {'NO.':<3} | {'PLAYER NAME':<16} | {'AVG ASSISTS':<9} |")
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<16} | {'AVG ASSIST':<9} |")
     print("-"*39)
 
     player_unique = []
@@ -2018,13 +2024,13 @@ def assist_avgLeaderboard():
     #print(player_unique)
 
     sort_assists_list = []
-    # sort ppg list
+    # sort assists list
     for i in player_unique:
         for players in assist_list:
             if i == players[0]:
                 sort_assists_list.append(players)
 
-    #print(sort_ppg_list)
+    #print(sort_assists_list)
 
     sum_counter = 0
     player_tracker = "default"
@@ -2078,7 +2084,6 @@ def assist_avgLeaderboard():
                 get_avg = sum_counter / player_counter
                 polish_get_avg = float(round(get_avg, 2))
                 player_avg_dict[player_tracker] = polish_get_avg
-
                 player_tracker = points[0]
                 player_counter = 0
                 sum_counter = 0
@@ -2107,7 +2112,94 @@ def assist_avgLeaderboard():
 # =================
 # rebound score option
 # =================
-def rebound_score():
+def rebound_score():# 6. User clicks point scores
+    # 1. Check Player Rebounds
+    #      -- Sort in ascending order
+    #      -- Sort in descending order
+    # 2. Check Ranking --> rebound ranked from highest to lowest
+    while True:
+        print("\n"+ "NBA 2K14 🏀".center(50))
+        print("Player Rebound Score".center(50))
+        print(f"Team: {official_team_name}")
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. Check Player Rebounds".center(50)+"|")
+        print("|"+ "2. Check Ranking".center(50)+"|")
+        print("|"+ "3. Main menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                player_rebounds()
+            elif option_prompt == 2:
+                rebound_ranking()
+            elif option_prompt == 3:
+                automate_load_csv()
+                save_to_csv()
+                main()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
+
+# Every option under rebound score
+# =============================
+
+# provides details for the highest player rebounds in each game.
+def player_rebounds():
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print("\nW: Won")
+    print("L: Lost\n")
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER REBOUNDS".center(50))
+    print("="*50)
+    print(f"| {'PLAYER NAME':<13} | {'REBOUNDS':<8} | {'OPPONENT':<12} | {'W/L':<4} |")
+    print("-"*50)
+
+    def result(game):
+        if official_team_name.split()[-1] in game[3]:
+            result = "W"
+        else:
+            result = "L"
+        return result
+
+    for rebounds, game in zip(rebound_list, game_list):
+        print(f"| {rebounds[0]:<14}| {rebounds[1]:<9}| {rebounds[2]:<13}| {result(game):<5}|")
+
+    print("-"*50)
+    print("="*50 + "\n")
+
+    sort = input("\nPress any key to return to menu or (s) to sort: ").lower()
+    if sort == "s":
+        sort_by_rebounds()
+    else:
+        rebound_score()
+
+def sort_by_rebounds():
+    pass
+
+def sort_ascending_rebounds():
+    pass
+
+def sort_descending_rebounds():
+    pass
+
+def rebound_ranking():
+    pass
+
+def rebound_overallHighest():
+    pass
+
+def rebound_avgLeaderboard():
     pass
 
 def block_score():
