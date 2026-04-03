@@ -2185,13 +2185,77 @@ def player_rebounds():
         rebound_score()
 
 def sort_by_rebounds():
-    pass
+    while True:
+        print("Sort".center(50))
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. From highest assists".center(50)+"|")
+        print("|"+ "2. From lowest assists".center(50)+"|")
+        print("|"+ "3. Menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                sort_ascending_rebounds()
+            elif option_prompt == 2:
+                sort_descending_rebounds()
+            elif option_prompt == 3:
+                rebound_score()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
 
 def sort_ascending_rebounds():
-    pass
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER REBOUNDS (A)".center(50))
+    print("="*50)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'REBOUNDS':<8} | {'OPPONENT':<12} |")
+    print("-"*50)
+
+    rebound_list.sort(key=lambda rebounds: int(rebounds[1]), reverse=True)
+
+    for idx, rebounds in enumerate(rebound_list, start=1):
+        print(f"| {idx:<4}| {rebounds[0]:<14}| {rebounds[1]:<9}| {rebounds[2]:<13}|")
+
+    print("-"*50)
+    print("="*50 + "\n")
+
+    rebound_list.clear()
+    return_back_rebounds()
 
 def sort_descending_rebounds():
-    pass
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print(f"Team: {official_team_name}")
+    print("="*50)
+    print("PLAYER REBOUNDS (A)".center(50))
+    print("="*50)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'REBOUNDS':<8} | {'OPPONENT':<12} |")
+    print("-"*50)
+
+    rebound_list.sort(key=lambda rebounds: int(rebounds[1]))
+
+    for idx, rebounds in enumerate(rebound_list, start=1):
+        print(f"| {idx:<4}| {rebounds[0]:<14}| {rebounds[1]:<9}| {rebounds[2]:<13}|")
+
+    print("-"*50)
+    print("="*50 + "\n")
+
+    rebound_list.clear()
+    return_back_rebounds()
 
 def rebound_ranking():
     pass
@@ -2287,6 +2351,10 @@ def return_back_ppg():
 def return_back_assists():
     input("\nPress enter to return to menu... ")
     assist_score()
+
+def return_back_rebounds():
+    input("\nPress enter to return to menu... ")
+    rebound_score()
 
 if __name__ == "__main__":
     load_csv()
