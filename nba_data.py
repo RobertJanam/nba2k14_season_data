@@ -2258,7 +2258,29 @@ def sort_descending_rebounds():
     return_back_rebounds()
 
 def rebound_ranking():
-    pass
+    while True:
+        print("Player Ranking".center(50))
+        print("====================================================")
+        print("|"+ "Choose your option".center(50)+"|")
+        print("----------------------------------------------------")
+        print("|"+ "".center(50)+ "|")
+        print("|"+ "1. Check Highest Player Rebound Ranking".center(50)+"|")
+        print("|"+ "2. Check Avg Rebound Leaderboard".center(50)+"|")
+        print("|"+ "3. Menu".center(50)+"|")
+        print("====================================================")
+
+        try:
+            option_prompt = int(input("Enter your choice here --> "))
+            if option_prompt == 1:
+                rebound_overallHighest()
+            elif option_prompt == 2:
+                rebound_avgLeaderboard()
+            elif option_prompt == 3:
+                rebound_score()
+            else:
+                print("Invalid option. Please enter a valid number")
+        except ValueError:
+            print("Please enter a valid number")
 
 def rebound_overallHighest():
     pass
