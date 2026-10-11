@@ -2258,6 +2258,9 @@ def sort_descending_rebounds():
     return_back_rebounds()
 
 def rebound_ranking():
+    #   2. Check Ranking --> talk about rebounds ranked from highest to lowest
+    #   -- 1. Check Highest Player Ranking
+    #   -- 2: Check Avg Leaderboard
     while True:
         print("Player Ranking".center(50))
         print("====================================================")
