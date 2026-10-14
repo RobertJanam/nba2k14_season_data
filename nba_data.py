@@ -2286,7 +2286,47 @@ def rebound_ranking():
             print("Please enter a valid number")
 
 def rebound_overallHighest():
-    pass
+    automate_load_csv()
+    if not game_list:
+        print("No games entered yet.\nEnter and save your data first to view them.")
+        return_back()
+
+    print("\nW: Won")
+    print("L: Lost\n")
+
+    print(f"Team: {official_team_name}")
+    print("="*56)
+    print("PLAYER HIGHEST REBOUNDS (RANKED)".center(50))
+    print("="*56)
+    print(f"| {'NO.':<3} | {'PLAYER NAME':<13} | {'REBOUNDS':<8} | {'OPPONENT':<12} | {'W/L':<4} |")
+    print("-"*56)
+
+    def result(game):
+        if official_team_name.split()[-1] in game[3]:
+            result = "W"
+        else:
+            result = "L"
+        return result
+
+    rebound_list.sort(key=lambda rebounds: int(rebounds[1]), reverse=True)
+
+    rank_rebounds_list = []
+
+    for a in rebounds_list:
+        if not any(a[0] == existing[0] for existing in rank_rebounds_list):
+            rank_rebounds_list.append(a)
+
+    for idx, (rebounds, game) in enumerate(zip(rank_rebounds_list, game_list), start=1):
+        print(f"| {idx:<4}| {rebounds[0]:<14}| {rebounds[1]:<9}| {rebounds[2]:<13}| {result(game):<5}|")
+
+    print("-"*56)
+    print("="*56 + "\n")
+
+    rebounds_list.clear()
+    rank_rebounds_list.clear()
+
+    input("\nPress enter to return to menu... ")
+    rebound_ranking()
 
 def rebound_avgLeaderboard():
     pass
